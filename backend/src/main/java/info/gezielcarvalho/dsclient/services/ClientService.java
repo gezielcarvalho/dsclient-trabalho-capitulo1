@@ -6,6 +6,8 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,12 @@ public class ClientService {
 	@Transactional(readOnly = true)
 	public List<ClientDTO> findAll() {
 		return clientRepository.findAll().stream().map(item -> new ClientDTO(item)).toList();
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<ClientDTO> findAllPaged(PageRequest pageRequest) {
+		// TODO Auto-generated method stub
+		return clientRepository.findAll(pageRequest).map(item -> new ClientDTO(item));
 	}
 
 	@Transactional(readOnly = true)
@@ -67,4 +75,5 @@ public class ClientService {
 			throw new ResourceNotFoundException("Id not found: "+ id);
 		}
 	}
+
 }
