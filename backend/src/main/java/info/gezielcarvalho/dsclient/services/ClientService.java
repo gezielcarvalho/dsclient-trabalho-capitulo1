@@ -43,23 +43,23 @@ public class ClientService {
 	@Transactional
 	public ClientDTO insert(ClientDTO clientDto) {
 		Client entity = new Client();
+		copyDtoToEntity(clientDto, entity);
+		return new ClientDTO(clientRepository.save(entity));
+	}
+
+	private void copyDtoToEntity(ClientDTO clientDto, Client entity) {
 		entity.setName(clientDto.getName());
 		entity.setIncome(clientDto.getIncome());
 		entity.setCpf(clientDto.getCpf());
 		entity.setChildren(clientDto.getChildren());
 		entity.setBirthDate(clientDto.getBirthDate());
-		return new ClientDTO(clientRepository.save(entity));
 	}
 
 	@Transactional
 	public ClientDTO update(Long id, ClientDTO clientDto) {
 		try {
 			Client entity = clientRepository.getOne(id);
-			entity.setName(clientDto.getName());
-			entity.setIncome(clientDto.getIncome());
-			entity.setCpf(clientDto.getCpf());
-			entity.setChildren(clientDto.getChildren());
-			entity.setBirthDate(clientDto.getBirthDate());
+			copyDtoToEntity(clientDto, entity);
 			return new ClientDTO(clientRepository.save(entity));
 		}
 		catch (EntityNotFoundException enfe) {
